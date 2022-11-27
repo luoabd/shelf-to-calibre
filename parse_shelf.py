@@ -10,9 +10,12 @@ class ParseShelf:
         self.soup = self.get_shelf_page(self.shelf_url)
 
     def parse_latest_entry(self):
-        latest_entry = self.soup.find_all(class_="title")[1]
-        latest_entry_cleaned = latest_entry.find('a')["title"]
-        return latest_entry_cleaned
+        latest_entry = self.soup.find_all(class_="bookalike")[0]
+        latest_entry_title = latest_entry.find(class_="title").find('a')["title"]
+        # Remove series name
+        latest_entry_title = latest_entry_title.split('(', 1)[0]
+        latest_entry_author = latest_entry.find(class_="author").find('a').get_text()
+        return (latest_entry_title, latest_entry_author)
 
     def get_shelf_page(self, shelf_url):
         shelf_page = requests.get(shelf_url)
@@ -22,10 +25,14 @@ class ParseShelf:
     def parse_full_shelf(self):
         self.iter = 1
         while True:
-            all_entries = self.soup.find_all(class_="title")
+            all_entries = self.soup.find_all(class_="bookalike")
             # 1st entry is the table's heading
-            for entry in all_entries[1:]:
-                print(entry.find('a')["title"])
+            for entry in all_entries:
+                entry_title = entry.find(class_="title").find('a')["title"]
+                # Remove series name
+                entry_title = entry_title.split('(', 1)[0]
+                entry_author = entry.find(class_="author").find('a').get_text()
+                print(entry_title, entry_author)
 
             # If next page link is inactive, stop
             if self.soup.find('a', {"rel": "next"}) is None:
