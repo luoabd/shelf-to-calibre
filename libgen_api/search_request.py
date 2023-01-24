@@ -40,7 +40,7 @@ class SearchRequest:
         query_parsed = "%20".join(self.query.split(" "))
         if self.search_type.lower() == "title":
             search_url = (
-                f"https://libgen.rs/fiction/?q={query_parsed}&criteria=title"
+                f"https://libgen.rs/fiction/?q={query_parsed}&criteria="
             )
         elif self.search_type.lower() == "author":
             search_url = (
@@ -58,7 +58,11 @@ class SearchRequest:
         for p in soup.find_all('p', class_="catalog_identifier"):
             p.decompose()
         # Libgen (fiction) results contain 1 table
+        # try:
         information_table = soup.find_all("table")[0]
+        # except IndexError:
+        #     print("Book not found")
+            # return ""
 
         # Determines whether the link url (for the mirror)
         # or link text (for the title) should be preserved.
