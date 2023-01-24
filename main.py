@@ -13,9 +13,8 @@ def download(book_title):
     if not os.path.isfile(filename):
         try:
             resp = requests.get(download_link)
-            print(resp)
             with open(filename, "wb") as f:
-                f.write(resp)
+                f.write(resp.content)
             print(f"Downloaded {filename}")
         except Exception as e:
             print(e)
