@@ -4,6 +4,8 @@ from add_to_calibre import AddToCalibre
 import os
 import urllib.parse
 import requests
+import time
+import datetime
 
 
 def download(book_title):
@@ -42,12 +44,23 @@ if (usage == "init"):
     calibre.import_all()
 
 elif (usage == "watch"):
-    book_title, book_author = ps.parse_latest_entry()
-    print(f"Latest entry is {book_title} by {book_author}")
-    try:
-        filename = download(str(book_title+' '+book_author))
-    except IndexError:
-        print(f"{book_title} by {book_author} is not available for download")
-    except:
-        print("Something went wrong")
-    calibre.import_book(filename)
+    while (True):
+        book_title, book_author = ps.parse_latest_entry()
+
+        now = datetime.datetime.now()
+        print(now.strftime("%Y-%m-%d %H:%M:%S"))
+
+        print(f"Latest entry is {book_title} by {book_author}")
+        if not calibre.check(book_title):
+            print(f'{book_title} by {book_author} already exists in the library')
+        else:
+            try:
+                filename = download(str(book_title+' '+book_author))
+            except IndexError:
+                print(f"{book_title} by {book_author} is not available for download")
+            except:
+                print("Something went wrong")
+            calibre.import_book(filename)
+
+        # wait for 30s
+        time.sleep(30)

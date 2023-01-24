@@ -1,5 +1,6 @@
 from decouple import config
 import os
+import subprocess
 
 CALIBRE_USERNAME = config('USER')
 CALIBRE_PASSWORD = config('PASSWORD')
@@ -11,3 +12,7 @@ class AddToCalibre:
         os.system(f'{self.command} add downloads/*.epub')
     def import_book(self, filename):
         os.system(f'{self.command} add "downloads/{filename}"')
+    def check(self, title):
+        response = subprocess.run(f'{self.command} search title:{title}', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # The returncode = 0 when a match is found
+        return response.returncode

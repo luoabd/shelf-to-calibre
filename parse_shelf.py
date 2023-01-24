@@ -12,7 +12,8 @@ class ParseShelf:
         self.soup = self.get_shelf_page(self.shelf_url)
 
     def parse_latest_entry(self):
-        latest_entry = self.soup.find_all(class_="bookalike")[0]
+        #TODO: Clean up the code
+        latest_entry = self.get_shelf_page(self.shelf_url).find_all(class_="bookalike")[0]
         latest_entry_title = latest_entry.find(class_="title").find('a')["title"]
         # Remove series name
         latest_entry_title = latest_entry_title.split('(', 1)[0]

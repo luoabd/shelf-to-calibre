@@ -3,6 +3,6 @@ Rename the .env.example file to .env and input your calibre server username and 
 ### TODO
 - [X] Catch exceptions when book is not found on libgen
 - [X] Download full shelf
-- [ ] Monitor shelf for new additions
+- [X] Monitor shelf for new additions
 - [X] Convert books to calibre format
 - [ ] Improve libgen search
