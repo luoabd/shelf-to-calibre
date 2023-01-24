@@ -1,11 +1,13 @@
 from libgen_api import LibgenSearch
 from parse_shelf import ParseShelf
 from add_to_calibre import AddToCalibre
+
 import os
 import urllib.parse
 import requests
 import time
 import datetime
+import sys
 
 
 def download(book_title):
@@ -26,13 +28,17 @@ def download(book_title):
     return filename
 
 
-# TODO: Change to command line args
-usage = "watch"
+if (len(sys.argv) != 2):
+    print("Usage: python main.py [init OR watch]")
+    print("init: Download the full goodreads shelf and import it to calibre")
+    print("watch: Only download and import the latest addition to the goodreads shelf (every 30s)")
+    exit(1)
+
 s = LibgenSearch()
 ps = ParseShelf()
 calibre = AddToCalibre()
 
-if (usage == "init"):
+if (sys.argv[1] == "init"):
     book_list = ps.parse_full_shelf()
     for book_title, book_author in book_list:
         try:
@@ -43,7 +49,7 @@ if (usage == "init"):
             print("Something went wrong")
     calibre.import_all()
 
-elif (usage == "watch"):
+elif (sys.argv[1] == "watch"):
     while (True):
         book_title, book_author = ps.parse_latest_entry()
 
@@ -64,3 +70,5 @@ elif (usage == "watch"):
 
         # wait for 30s
         time.sleep(30)
+else:
+    print('Please enter a correct argument')
