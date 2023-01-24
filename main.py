@@ -30,7 +30,7 @@ if (usage == "init"):
     book_list = ps.parse_full_shelf()
     for book_title, book_author in book_list:
         try:
-            download(str(book_title+book_author))
+            download(str(book_title+' '+book_author))
         except IndexError:
             print(f"{book_title} by {book_author} is not available for download")
         except:
@@ -40,7 +40,7 @@ elif (usage == "watch"):
     book_title, book_author = ps.parse_latest_entry()
     print(f"Latest entry is {book_title} by {book_author}")
     try:
-        download(str(book_title+book_author))
+        download(str(book_title+' '+book_author))
     except IndexError:
         print(f"{book_title} by {book_author} is not available for download")
     except:
